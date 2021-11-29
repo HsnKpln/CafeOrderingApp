@@ -20,14 +20,14 @@ namespace CafeOrderingApp.Forms
             InitializeComponent();
         }
 
-        public CafeContext Context { get; set; }
-        private KatRepository _repository;
+        public CafeContext Context;
+        private KatRepository repository = new KatRepository();
         private void btnKatKaydet_Click(object sender, EventArgs e)
         {
             Kat yeniKat = new Kat()
             {
                 Ad = txtKatAdi.Text,
-                //Kod = txtKod.Text,
+                Kod =txtKod.Text,
                 Sira = int.Parse(txtSira.Text)
             };
             int adet = int.Parse(txtMasaAdeti.Text);
@@ -41,9 +41,14 @@ namespace CafeOrderingApp.Forms
                 };
                 yeniKat.Masalar.Add(yeniMasa);
             }
-            _repository.Add(yeniKat);
+            repository.Add(yeniKat);
             lstKatlar.DataSource = null;
-            lstKatlar.DataSource = _repository.GetAll().OrderBy(x => x.Sira).ToList();
+            lstKatlar.DataSource = repository.GetAll().OrderBy(x => x.Sira).ToList();
+        }
+
+        private void FrmKatAyar_Load(object sender, EventArgs e)
+        {
+            repository.Context = Context;
         }
     }
 }
